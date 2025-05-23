@@ -1,6 +1,6 @@
 #pragma once
 
-#include <primitive_set.hpp>
+#include <abstract_algebra/primitive_set.hpp>
 
 #include <cstdint>
 #include <concepts>
