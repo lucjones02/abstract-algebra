@@ -23,7 +23,7 @@ public:
     element_of_base(typename S::value_type _val) : m_value(_val) {};
     element_of_base(const Impl& _e) : m_value(_e.m_value) {};
 
-    element_of_base& operator=(const Impl& _e) { m_value = _e.m_value; return this; }
+    element_of_base& operator=(const Impl& _e) { m_value = _e.m_value; return *this; }
     element_of_base& operator=(typename S::value_type _val) { m_value = _val; return *this; }
 
     friend std::ostream& operator<<(std::ostream& os, Impl& e) {
