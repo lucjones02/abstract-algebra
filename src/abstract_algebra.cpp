@@ -15,6 +15,6 @@ int main()
     std::cout << "e  = " << e << std::endl;
     std::cout << "e3 = " << e3 << std::endl;
 
-    using G = aa::group<S, std::plus<uint32_t>>;
+    using G = aa::group<S>;
     aa::element_of<G, aa::TYPE::GROUP> g;
 }
