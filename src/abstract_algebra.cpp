@@ -27,5 +27,4 @@ int main()
     std::cout << "g2 = " << g2 << std::endl;
     std::cout << "g3 = " << g3 << std::endl;
 
-
 }
