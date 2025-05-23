@@ -5,8 +5,8 @@
 #include <iostream>
 #include <cassert>
 
-#include <primitive_set.hpp>
-#include <group.hpp>
+#include <abstract_algebra/primitive_set.hpp>
+#include <abstract_algebra/group.hpp>
 
 namespace abstract_algebra {
 

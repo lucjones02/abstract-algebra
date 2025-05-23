@@ -8,4 +8,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-add_subdirectory(src)
+set(SOURCES 
+    ${PROJECT_SOURCE_DIR}/src/abstract_algebra.cpp
+)
+add_library(abstract_algebra INTERFACE)
+file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/include/*.hpp")
+target_include_directories(abstract_algebra INTERFACE ${PROJECT_SOURCE_DIR}/include)
+
+add_subdirectory(tests)
