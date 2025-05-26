@@ -62,3 +62,81 @@ TEST_CASE("basic addition in groups", "[construction]"){
     }
 }
 
+constexpr char cayley_table[4][4] = {
+    {'e', 'a', 'b', 'c'},
+    {'a', 'e', 'c', 'b'},
+    {'b', 'c', 'e', 'a'},
+    {'c', 'b', 'a', 'e'},
+};
+
+TEST_CASE( "Klein four-group", "[construction]"){
+    using S = aa::primitive_set<char, 4>;
+
+    struct klein_mult {
+        char operator()(const char& _c1, const char& _c2) const{
+            char i = _c1 == 'e' ? 0 : _c1 - 'a' + 1;
+            char j = _c2 == 'e' ? 0 : _c2 - 'a' + 1;
+            return cayley_table[i][j];
+        }
+    };
+
+    using G = aa::group<S, klein_mult>;
+    aa::element_of<G, aa::TYPE::GROUP> e = 'e';
+    aa::element_of<G, aa::TYPE::GROUP> a = 'a';
+    aa::element_of<G, aa::TYPE::GROUP> b = 'b';
+    aa::element_of<G, aa::TYPE::GROUP> c = 'c';
+
+    aa::element_of<G, aa::TYPE::GROUP> g;
+
+    SECTION("e * a"){
+        g = e + a;
+
+        REQUIRE(g.has_value());
+        REQUIRE(g == a);
+    }
+
+    SECTION("e * b"){
+        g = e + b;
+
+        REQUIRE(g.has_value());
+        REQUIRE(g == b);
+    }
+
+    SECTION("e * c"){
+        g = e + c;
+
+        REQUIRE(g.has_value());
+        REQUIRE(g == c);
+    }
+
+    SECTION("a * a"){
+        g = a + a;
+
+        REQUIRE(g.has_value());
+        REQUIRE(g == klein_mult()('a', 'a'));
+        REQUIRE(g == e);
+    }
+
+    SECTION("a * c"){
+        g = a + c;
+
+        REQUIRE(g.has_value());
+        REQUIRE(g == klein_mult()('a', 'c'));
+        REQUIRE(g == b);
+    }
+
+    SECTION("(a * a) * (b * b)"){
+        g = (a + a) + (b + b);
+
+        REQUIRE(g.has_value());
+        REQUIRE(g == e);
+    }
+
+    SECTION("(a * c) * (a * c)"){
+        g = (a + c) + (a + c);
+
+        REQUIRE(g.has_value());
+        REQUIRE(g == e);
+    }
+}
+

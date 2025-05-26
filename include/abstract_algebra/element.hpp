@@ -26,6 +26,12 @@ public:
     element_of_base& operator=(const Impl& _e) { m_value = _e.m_value; return *this; }
     element_of_base& operator=(typename S::value_type _val) { m_value = _val; return *this; }
 
+    // bool operator==(const Impl& _e) { return m_value == _e.m_value; }
+    // bool operator==(typename S::value_type _val) { return m_value.has_value() ? m_value.value() == _val : false; }
+
+    friend bool operator==(const Impl& _e1, const Impl& _e2) { return _e1.m_value == _e2.m_value; }
+    friend bool operator==(const Impl& _e, typename S::value_type _val) { return _e.has_value() ? _e.get_value() == _val : false; }
+
     friend std::ostream& operator<<(std::ostream& os, Impl& e) {
         if (e.has_value()) {
             os << e.m_value.value();
@@ -49,7 +55,6 @@ public:
 
 private:
     std::optional<typename S::value_type> m_value;
-
 };
 
 template <typename S, TYPE type>
