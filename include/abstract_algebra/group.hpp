@@ -19,6 +19,5 @@ namespace abstract_algebra
             static constexpr auto addition = add();
             
     };
-
 }
 
