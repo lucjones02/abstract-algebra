@@ -5,9 +5,9 @@ namespace aa = abstract_algebra;
 
 TEST_CASE("construct elements", "[construction]") {
     using S = aa::primitive_set<uint32_t, 32>;
-    aa::element_of<S, aa::TYPE::SET> e0;
-    aa::element_of<S, aa::TYPE::SET> e1 {0};
-    aa::element_of<S, aa::TYPE::SET> e2 = 0;
+    aa::element_of<S> e0;
+    aa::element_of<S> e1 {0};
+    aa::element_of<S> e2 = 0;
 
     REQUIRE(!e0.has_value());
     REQUIRE(e1.has_value());
@@ -17,9 +17,9 @@ TEST_CASE("construct elements", "[construction]") {
     REQUIRE(e2.get_value() == 0);
 
     using G = aa::group<S, std::plus<S::value_type>>;
-    aa::element_of<G, aa::TYPE::GROUP> g0;
-    aa::element_of<G, aa::TYPE::GROUP> g1 {0};
-    aa::element_of<G, aa::TYPE::GROUP> g2 = 0;
+    aa::element_of<G> g0;
+    aa::element_of<G> g1 {0};
+    aa::element_of<G> g2 = 0;
 
     REQUIRE(!g0.has_value());
     REQUIRE(g1.has_value());
@@ -32,11 +32,11 @@ TEST_CASE("construct elements", "[construction]") {
 TEST_CASE("basic addition in groups", "[construction]"){
     using S = aa::primitive_set<uint32_t, 32>;
     using G = aa::group<S, std::plus<S::value_type>>;
-    aa::element_of<G, aa::TYPE::GROUP> g;
+    aa::element_of<G> g;
 
     SECTION("2 + 2"){
-        aa::element_of<G, aa::TYPE::GROUP> g1 = 2;
-        aa::element_of<G, aa::TYPE::GROUP> g2 = 2;
+        aa::element_of<G> g1 = 2;
+        aa::element_of<G> g2 = 2;
         g = g1 + g2;
 
         REQUIRE(g.has_value());
@@ -44,8 +44,8 @@ TEST_CASE("basic addition in groups", "[construction]"){
     }
 
     SECTION("9 + 10"){
-        aa::element_of<G, aa::TYPE::GROUP> g1 = 9;
-        aa::element_of<G, aa::TYPE::GROUP> g2 = 10;
+        aa::element_of<G> g1 = 9;
+        aa::element_of<G> g2 = 10;
         g = g1 + g2;
 
         REQUIRE(g.has_value());
@@ -53,8 +53,8 @@ TEST_CASE("basic addition in groups", "[construction]"){
     }
 
     SECTION("12 + 0"){
-        aa::element_of<G, aa::TYPE::GROUP> g1 = 12;
-        aa::element_of<G, aa::TYPE::GROUP> g2 = 0;
+        aa::element_of<G> g1 = 12;
+        aa::element_of<G> g2 = 0;
         g = g1 + g2;
 
         REQUIRE(g.has_value());
@@ -81,12 +81,12 @@ TEST_CASE( "Klein four-group", "[construction]"){
     };
 
     using G = aa::group<S, klein_mult>;
-    aa::element_of<G, aa::TYPE::GROUP> e = 'e';
-    aa::element_of<G, aa::TYPE::GROUP> a = 'a';
-    aa::element_of<G, aa::TYPE::GROUP> b = 'b';
-    aa::element_of<G, aa::TYPE::GROUP> c = 'c';
+    aa::element_of<G> e = 'e';
+    aa::element_of<G> a = 'a';
+    aa::element_of<G> b = 'b';
+    aa::element_of<G> c = 'c';
 
-    aa::element_of<G, aa::TYPE::GROUP> g;
+    aa::element_of<G> g;
 
     SECTION("e * a"){
         g = e + a;

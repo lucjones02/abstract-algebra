@@ -10,13 +10,7 @@
 
 namespace abstract_algebra {
 
-enum class TYPE {
-    SET,
-    GROUP,
-    RING
-};
-
-template <typename S, TYPE type, class Impl> // Impl is for CRTP
+template <typename S, class Impl> // Impl is for CRTP
 class element_of_base {
 public:
     element_of_base() = default;
@@ -25,9 +19,6 @@ public:
 
     element_of_base& operator=(const Impl& _e) { m_value = _e.m_value; return *this; }
     element_of_base& operator=(typename S::value_type _val) { m_value = _val; return *this; }
-
-    // bool operator==(const Impl& _e) { return m_value == _e.m_value; }
-    // bool operator==(typename S::value_type _val) { return m_value.has_value() ? m_value.value() == _val : false; }
 
     friend bool operator==(const Impl& _e1, const Impl& _e2) { return _e1.m_value == _e2.m_value; }
     friend bool operator==(const Impl& _e, typename S::value_type _val) { return _e.has_value() ? _e.get_value() == _val : false; }
@@ -57,13 +48,13 @@ private:
     std::optional<typename S::value_type> m_value;
 };
 
-template <typename S, TYPE type>
-class element_of : public element_of_base<S, type, element_of<S, type>> {};
+template <typename S>
+class element_of : public element_of_base<S, element_of<S>> {};
 
-template <typename S> requires std::derived_from<S, primitive_set_t>
-class element_of<S, TYPE::SET> : public element_of_base<S, TYPE::SET, element_of<S, TYPE::SET>> {
-    using element_t = element_of<S, TYPE::SET>;
-    using base_element_t = element_of_base<S, TYPE::SET, element_t>;
+template <std::derived_from<primitive_set_t> S>
+class element_of<S> : public element_of_base<S, element_of<S>> {
+    using element_t = element_of<S>;
+    using base_element_t = element_of_base<S, element_t>;
 
 public:
     element_of() : base_element_t() {}
@@ -72,13 +63,12 @@ public:
 
     element_t& operator=(typename S::value_type _val) { base_element_t::operator=(_val); return *this; }
     element_t& operator=(const element_t& _e) { base_element_t::operator=(_e); return *this; }
-
 };
 
-template <typename G> requires std::derived_from<G, group_t>
-class element_of<G, TYPE::GROUP> : public element_of_base<G, TYPE::GROUP, element_of<G, TYPE::GROUP>> {
-    using element_t = element_of<G, TYPE::GROUP>;
-    using base_element_t = element_of_base<G, TYPE::GROUP, element_t>;
+template <std::derived_from<group_t> G>
+class element_of<G> : public element_of_base<G, element_of<G>> {
+    using element_t = element_of<G>;
+    using base_element_t = element_of_base<G, element_t>;
 
 public:
     element_of() : base_element_t() {}
