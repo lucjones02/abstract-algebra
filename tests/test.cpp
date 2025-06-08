@@ -27,6 +27,18 @@ TEST_CASE("construct elements", "[construction]") {
 
     REQUIRE(g1.get_value() == 0);
     REQUIRE(g2.get_value() == 0);
+
+    using R = aa::ring<S, std::plus<S::value_type>, std::multiplies<S::value_type>>;
+    aa::element_of<R> r0;
+    aa::element_of<R> r1 {0};
+    aa::element_of<R> r2 = 0;
+
+    REQUIRE(!r0.has_value());
+    REQUIRE(r1.has_value());
+    REQUIRE(r2.has_value());
+
+    REQUIRE(r1.get_value() == 0);
+    REQUIRE(r2.get_value() == 0);
 }
 
 TEST_CASE("basic addition in groups", "[construction]"){
@@ -137,6 +149,53 @@ TEST_CASE( "Klein four-group", "[construction]"){
 
         REQUIRE(g.has_value());
         REQUIRE(g == e);
+    }
+}
+
+TEST_CASE("basic addition and multiplication for rings", "[construction]"){
+    using S = aa::primitive_set<uint32_t, 32>;
+    using R = aa::ring<S, std::plus<S::value_type>, std::multiplies<S::value_type>>;
+    aa::element_of<R> e;
+
+    SECTION("2 + 2"){
+        aa::element_of<R> e1 = 2;
+        aa::element_of<R> e2 = 2;
+        e = e1 + e2;
+
+        REQUIRE(e.has_value());
+        REQUIRE((e == 4));
+    }
+
+    SECTION("12 + 0"){
+        aa::element_of<R> e1 = 12;
+        aa::element_of<R> e2 = 0;
+        e = e1 + e2;
+
+        REQUIRE(e.has_value());
+        REQUIRE((e == 12));
+    }
+
+    SECTION("2 * 2"){
+        aa::element_of<R> e1 = 2;
+        aa::element_of<R> e2 = 2;
+        e = e1 * e2;
+
+        REQUIRE(e.has_value());
+        REQUIRE((e == 4));
+    }
+
+    SECTION("(2 + 2) * 3"){
+        aa::element_of<R> e1 = 2;
+        aa::element_of<R> e2 = 2;
+        aa::element_of<R> e3 = 3;
+        aa::element_of<R> res;
+
+        e = (e1 + e2) * e3;
+        res = e1 * e3 + e2 * e3;
+
+        REQUIRE(e.has_value());
+        REQUIRE(res.has_value());
+        REQUIRE((e == res));
     }
 }
 
